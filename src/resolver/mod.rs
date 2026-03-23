@@ -1,2 +1,5 @@
 //! Entity deduplication and resolution
-pub struct EntityResolver;
+pub mod fuzzy;
+pub mod id_registry;
+
+pub use id_registry::IdRegistry;

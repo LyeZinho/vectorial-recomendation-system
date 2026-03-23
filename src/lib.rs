@@ -7,3 +7,4 @@ pub mod triplets;
 pub mod storage;
 pub mod ml;
 pub mod api;
+pub mod recommendation;

@@ -64,7 +64,7 @@ fn test_sqlite_storage_persistence() {
 #[test]
 fn test_cli_help_runs() {
     let output = std::process::Command::new(
-        "/home/pedro/repo/vectorial-recomendation-system/.worktrees/harvester-phase1/target/debug/anime-harvester",
+        "/home/pedro/repo/vectorial-recomendation-system/target/debug/anime-harvester",
     )
     .arg("--help")
     .output()

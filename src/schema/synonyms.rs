@@ -184,7 +184,7 @@ impl SynonymDict {
     pub fn classify_column(&self, header: &str) -> Option<String> {
         let lower = header.to_lowercase().trim().to_string();
 
-        let mut priority_order = vec![
+        let priority_order = vec![
             "person_name",
             "person_given_name",
             "person_family_name",

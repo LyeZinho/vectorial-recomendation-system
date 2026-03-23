@@ -30,7 +30,7 @@ tokio = { version = "1", features = ["full"] }
 tower = "0.4"
 tower-http = { version = "0.5", features = ["trace", "cors", "fs"] }
 ndarray = "0.16"
-ndarray-linalg = { version = "0.16", features = ["openblas-static"] }
+#ndarray-linalg = { version = "0.16", features = ["openblas-static"] }
 parking_lot = "0.12"
 neo4rs = "0.9.0-rc.9"
 rand = "0.8"

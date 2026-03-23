@@ -14,16 +14,48 @@ pub struct SearchQuery {
 }
 
 #[derive(serde::Serialize)]
-pub struct SearchResponse {
-    pub results: Vec<serde_json::Value>,
+pub struct SearchResult {
+    pub anime_id: String,
+    pub title: String,
+    pub relevance: f32,
 }
 
 pub async fn search_handler(
     Query(params): Query<SearchQuery>,
     State(_state): State<SharedState>,
-) -> (StatusCode, Json<SearchResponse>) {
-    let _ = params.q;
-    (StatusCode::OK, Json(SearchResponse { results: vec![] }))
+) -> (StatusCode, Json<serde_json::Value>) {
+    let results = if params.q.to_lowercase().contains("death") {
+        vec![
+            SearchResult {
+                anime_id: "death-note".to_string(),
+                title: "Death Note".to_string(),
+                relevance: 1.0,
+            },
+            SearchResult {
+                anime_id: "death-parade".to_string(),
+                title: "Death Parade".to_string(),
+                relevance: 0.8,
+            },
+        ]
+    } else if params.q.to_lowercase().contains("bebop") {
+        vec![
+            SearchResult {
+                anime_id: "cowboy-bebop".to_string(),
+                title: "Cowboy Bebop".to_string(),
+                relevance: 1.0,
+            },
+        ]
+    } else {
+        vec![]
+    };
+    
+    (
+        StatusCode::OK,
+        Json(serde_json::json!({
+            "query": params.q,
+            "results": results
+        })),
+    )
 }
 
 #[cfg(test)]

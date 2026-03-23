@@ -28,6 +28,14 @@ impl SynonymDict {
         );
 
         synonyms.insert(
+            "anime_id".to_string(),
+            vec!["anime_id", "anime id", "mal_id", "mal id", "animeID"]
+                .iter()
+                .map(|s| s.to_lowercase())
+                .collect(),
+        );
+
+        synonyms.insert(
             "anime_score".to_string(),
             vec![
                 "score",
@@ -184,6 +192,7 @@ impl SynonymDict {
             "user_id",
             "user_name",
             "user_days_watched",
+            "anime_id",
             "anime_title",
             "anime_score",
             "anime_episodes",

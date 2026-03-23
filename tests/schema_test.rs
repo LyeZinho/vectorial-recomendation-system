@@ -1,60 +1,37 @@
-use anime_harvester::schema::synonyms::SynonymDict;
+use anime_harvester::schema::{EntityType, SchemaInferrer};
+use std::fs;
+use tempfile::TempDir;
 
 #[test]
-fn test_synonym_dict_recognizes_anime_core_columns() {
-    let dict = SynonymDict::new();
+fn test_infer_schema_detects_anime_core() {
+    let temp = TempDir::new().unwrap();
+    let root = temp.path();
 
-    assert_eq!(
-        dict.classify_column("title"),
-        Some("anime_title".to_string())
-    );
-    assert_eq!(
-        dict.classify_column("Title"),
-        Some("anime_title".to_string())
-    );
-    assert_eq!(
-        dict.classify_column("Anime Title"),
-        Some("anime_title".to_string())
-    );
+    let csv_content = "Title,Score,Episodes,Studio,Genres\nFMA,9.1,64,Bones,Action|Adventure";
+    fs::write(root.join("test.csv"), csv_content).unwrap();
 
-    assert_eq!(
-        dict.classify_column("score"),
-        Some("anime_score".to_string())
-    );
-    assert_eq!(
-        dict.classify_column("rating"),
-        Some("anime_score".to_string())
-    );
-    assert_eq!(
-        dict.classify_column("mean_score"),
-        Some("anime_score".to_string())
-    );
+    let inferrer = SchemaInferrer::new();
+    let schema = inferrer
+        .infer_schema(root.join("test.csv").to_str().unwrap())
+        .unwrap();
+
+    assert_eq!(schema.entity_type, EntityType::AnimeCore);
+    assert!(schema.confidence > 0.5, "Confidence should be > 0.5");
 }
 
 #[test]
-fn test_synonym_dict_recognizes_person_columns() {
-    let dict = SynonymDict::new();
+fn test_infer_schema_detects_user_anime_list() {
+    let temp = TempDir::new().unwrap();
+    let root = temp.path();
 
-    assert_eq!(
-        dict.classify_column("name"),
-        Some("person_name".to_string())
-    );
-    assert_eq!(
-        dict.classify_column("given_name"),
-        Some("person_given_name".to_string())
-    );
-    assert_eq!(
-        dict.classify_column("family_name"),
-        Some("person_family_name".to_string())
-    );
-    assert_eq!(
-        dict.classify_column("birthday"),
-        Some("person_birthday".to_string())
-    );
-}
+    let csv_content =
+        "user_id,anime_id,my_score,my_status,my_watched_episodes\n123,456,9,completed,12";
+    fs::write(root.join("test.csv"), csv_content).unwrap();
 
-#[test]
-fn test_synonym_dict_returns_none_for_unknown() {
-    let dict = SynonymDict::new();
-    assert_eq!(dict.classify_column("xyz_unknown_field"), None);
+    let inferrer = SchemaInferrer::new();
+    let schema = inferrer
+        .infer_schema(root.join("test.csv").to_str().unwrap())
+        .unwrap();
+
+    assert_eq!(schema.entity_type, EntityType::UserAnimeList);
 }

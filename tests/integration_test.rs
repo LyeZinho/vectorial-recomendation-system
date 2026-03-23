@@ -2,7 +2,6 @@ use anime_harvester::scanner::FileScanner;
 use anime_harvester::schema::SchemaInferrer;
 use anime_harvester::storage::SqliteStorage;
 use tempfile::TempDir;
-use tempfile::TempDir;
 
 #[test]
 fn test_full_pipeline_on_real_datapool() {

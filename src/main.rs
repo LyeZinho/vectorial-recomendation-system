@@ -222,13 +222,24 @@ fn stats(db: &str) -> anyhow::Result<()> {
 }
 
 async fn serve(host: &str, port: &str, neo4j_uri: &str) -> anyhow::Result<()> {
+    use anime_harvester::api;
+    use anime_harvester::api::state::AppState;
+    use tokio::net::TcpListener;
+    
     println!("🚀 Starting Anime2Vec API server");
     println!("📍 Listening on http://{}:{}", host, port);
     println!("🗄️  Neo4j: {}", neo4j_uri);
     
-    println!("⚠️  Neo4j connection support requires configuration");
-    println!("   Phase 2 API scaffolding complete");
-    println!("   Ready for integration testing with running Neo4j instance");
+    let graph = neo4rs::Graph::new(neo4j_uri, "neo4j", "password")?;
+    let state = AppState::new(graph).as_shared();
+    
+    let router = api::build_router(state);
+    
+    let addr = format!("{}:{}", host, port);
+    let listener = TcpListener::bind(&addr).await?;
+    println!("✓ Server ready");
+    
+    axum::serve(listener, router).await?;
     
     Ok(())
 }

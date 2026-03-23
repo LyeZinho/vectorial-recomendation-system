@@ -34,7 +34,7 @@ services:
       NEO4J_PASSWORD: password
       RUST_LOG: info
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./data:/app/data
     healthcheck:

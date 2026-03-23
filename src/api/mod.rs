@@ -5,12 +5,28 @@ pub mod state;
 
 use axum::{
     routing::get,
+    http::StatusCode,
+    response::IntoResponse,
+    Json,
     Router,
 };
 use crate::api::state::SharedState;
+use serde_json::json;
+
+async fn root_handler() -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        Json(json!({
+            "service": "Anime2Vec Recommendation Engine",
+            "version": "2.0",
+            "status": "ready"
+        }))
+    )
+}
 
 pub fn build_router(state: SharedState) -> Router {
     Router::new()
+        .route("/", get(root_handler))
         .route("/api/recommendations/:id", get(handlers::recommendations_handler))
         .route("/api/search", get(handlers::search_handler))
         .route("/api/explain/:rec_id", get(handlers::explain_handler))

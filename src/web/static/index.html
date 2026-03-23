@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime2Vec Recommendation Engine</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Anime2Vec Recommendation Engine</h1>
+            <p>Powered by Knowledge Graph Embeddings</p>
+        </header>
+
+        <main>
+            <section class="search-section">
+                <h2>Find Recommendations</h2>
+                <div class="search-form">
+                    <input 
+                        type="text" 
+                        id="animeInput" 
+                        placeholder="Enter anime title (e.g., Cowboy Bebop)"
+                        class="search-input"
+                    >
+                    <button id="searchBtn" class="btn btn-primary">Get Recommendations</button>
+                </div>
+            </section>
+
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <h2>Recommendations</h2>
+                <div id="resultsContainer" class="results-container"></div>
+            </section>
+
+            <section class="info-section">
+                <h3>About</h3>
+                <p>This engine uses four recommendation layers:</p>
+                <ul>
+                    <li><strong>Technical DNA:</strong> Animes by same director/studio</li>
+                    <li><strong>Niche Clustering:</strong> Genre-bridge discovery</li>
+                    <li><strong>Influence Chain:</strong> Creator genealogy</li>
+                    <li><strong>Underground Discovery:</strong> Quality over popularity</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>Phase 2 - Anime2Vec ML Pipeline</p>
+        </footer>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

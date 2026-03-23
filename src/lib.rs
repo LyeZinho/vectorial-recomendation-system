@@ -8,3 +8,4 @@ pub mod storage;
 pub mod ml;
 pub mod api;
 pub mod recommendation;
+pub mod web;

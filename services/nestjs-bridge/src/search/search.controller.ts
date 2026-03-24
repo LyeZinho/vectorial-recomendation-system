@@ -25,4 +25,36 @@ export class SearchController {
       limit: limit ? parseInt(limit) : 20,
     });
   }
+
+  @Get('genres')
+  @UseGuards(JwtAuthGuard)
+  async getGenres() {
+    return {
+      genres: [
+        'Action',
+        'Adventure',
+        'Comedy',
+        'Drama',
+        'Fantasy',
+        'Horror',
+        'Psychological',
+        'Romance',
+        'Sci-Fi',
+        'Slice of Life',
+        'Sports',
+        'Thriller',
+      ],
+    };
+  }
+
+  @Get('years')
+  @UseGuards(JwtAuthGuard)
+  async getYears() {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let i = currentYear; i >= 1970; i--) {
+      years.push(i);
+    }
+    return { years };
+  }
 }

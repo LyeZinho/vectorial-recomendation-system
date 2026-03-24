@@ -1,5 +1,6 @@
 //! REST API server (Axum)
 
+pub mod errors;
 pub mod handlers;
 pub mod state;
 

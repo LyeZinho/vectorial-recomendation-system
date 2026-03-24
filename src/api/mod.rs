@@ -30,6 +30,8 @@ async fn root_handler() -> impl IntoResponse {
 }
 
 pub fn build_router(state: SharedState) -> Router {
+    let rate_limiter = state.rate_limiter.clone();
+
     Router::new()
         .route("/", get(root_handler))
         .route("/api/login", post(handlers::login_handler))
@@ -45,6 +47,15 @@ pub fn build_router(state: SharedState) -> Router {
                     crate::api::auth::admin_middleware,
                 )),
         )
+        .layer(axum_middleware::from_fn(move |req, next: axum_middleware::Next| {
+            let limiter = rate_limiter.clone();
+            async move {
+                if limiter.check_limit().is_err() {
+                    return Err(StatusCode::TOO_MANY_REQUESTS);
+                }
+                Ok(next.run(req).await)
+            }
+        }))
         .with_state(state)
 }
 

@@ -6,7 +6,7 @@ pub mod state;
 pub mod auth;
 
 use axum::{
-    routing::get,
+    routing::{get, post},
     http::StatusCode,
     response::IntoResponse,
     Json,
@@ -29,6 +29,8 @@ async fn root_handler() -> impl IntoResponse {
 pub fn build_router(state: SharedState) -> Router {
     Router::new()
         .route("/", get(root_handler))
+        .route("/api/login", post(handlers::login_handler))
+        .route("/api/refresh", post(handlers::refresh_handler))
         .route("/api/recommendations/:id", get(handlers::recommendations_handler))
         .route("/api/search", get(handlers::search_handler))
         .route("/api/explain/:anime_id/:rec_id", get(handlers::explain_handler))

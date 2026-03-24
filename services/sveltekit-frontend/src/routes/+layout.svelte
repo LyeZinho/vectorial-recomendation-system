@@ -4,9 +4,11 @@
   import '../app.css';
 
   let isLoggedIn = false;
+  let isAdmin = false;
 
   authStore.subscribe(state => {
     isLoggedIn = state.isLoggedIn;
+    isAdmin = state.user?.role === 'admin';
   });
 
   async function handleLogout() {
@@ -24,6 +26,9 @@
         <a href="/discovery" class="font-bold hover:text-yellow-300">Discovery</a>
         <a href="/recommendations" class="font-bold hover:text-yellow-300">Recommendations</a>
         <a href="/profile" class="font-bold hover:text-yellow-300">Profile</a>
+        {#if isAdmin}
+          <a href="/admin" class="font-bold text-yellow-300 hover:underline">Admin</a>
+        {/if}
         <button
           on:click={handleLogout}
           class="bg-purple-600 px-4 py-2 font-bold hover:bg-purple-500"

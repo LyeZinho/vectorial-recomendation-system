@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-black tracking-tight;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-yellow-300 text-black px-6 py-3 font-bold hover:bg-yellow-200 transition;
+  }
+
+  .btn-secondary {
+    @apply bg-purple-600 text-white px-6 py-3 font-bold hover:bg-purple-500 transition;
+  }
+
+  .card {
+    @apply bg-gray-900 border-2 border-yellow-300 p-4;
+  }
+}

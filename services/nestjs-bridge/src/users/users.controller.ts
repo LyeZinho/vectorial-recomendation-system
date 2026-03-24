@@ -9,7 +9,7 @@ export class UsersController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  async getMe(@Request() req) {
+  async getMe(@Request() req: any) {
     return {
       id: req.user.id,
       email: req.user.email,
@@ -32,7 +32,7 @@ export class UsersController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
-  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Request() req) {
+  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Request() req: any) {
     if (req.user.id !== id && req.user.role !== 'admin') {
       throw new ForbiddenException('Cannot update other users');
     }
@@ -65,7 +65,7 @@ export class UsersController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteUser(@Param('id') id: string, @Request() req) {
+  async deleteUser(@Param('id') id: string, @Request() req: any) {
     if (req.user.id !== id && req.user.role !== 'admin') {
       throw new ForbiddenException('Cannot delete other users');
     }

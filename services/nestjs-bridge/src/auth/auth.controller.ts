@@ -25,13 +25,13 @@ export class AuthController {
 
   @Post('refresh')
   @UseGuards(JwtAuthGuard)
-  async refresh(@Request() req) {
+  async refresh(@Request() req: any) {
     return this.authService.refresh(req.user);
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  me(@Request() req) {
+  me(@Request() req: any) {
     return {
       id: req.user.id,
       email: req.user.email,

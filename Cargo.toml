@@ -12,19 +12,46 @@ name = "anime_harvester"
 path = "src/lib.rs"
 
 [dependencies]
+# Phase 1: Data harvesting
 csv = "1.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 walkdir = "2.4"
 strsim = "0.11"
 rusqlite = { version = "0.32", features = ["bundled"] }
-uuid = { version = "1.6", features = ["v4", "serde"] }
+uuid = { version = "1", features = ["v4", "serde"] }
 clap = { version = "4.4", features = ["derive"] }
+bincode = "1.3"
+regex = "1"
+
+# Phase 2: Web server & ML stack
+axum = "0.7"
+tokio = { version = "1", features = ["full"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["trace", "cors", "fs"] }
+ndarray = "0.16"
+#ndarray-linalg = { version = "0.16", features = ["openblas-static"] }
+parking_lot = "0.12"
+neo4rs = "0.9.0-rc.9"
+rand = "0.8"
+
+# Phase 5: Authentication & Security
+jsonwebtoken = "9.2"
+chrono = "0.4"
+redis = "0.24"
+governor = "0.7"
+unicode-segmentation = "1.10"
+
+# Common utilities
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-anyhow = "1.0"
-thiserror = "1.0"
-bincode = "1.3"
+anyhow = "1"
+thiserror = "1"
 
 [dev-dependencies]
 tempfile = "3.8"
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "recommendation_bench"
+harness = false

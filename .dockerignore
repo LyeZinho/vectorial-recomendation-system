@@ -1,0 +1,29 @@
+# Build artifacts (keep debug, exclude some debug files)
+target/debug/
+*.o
+*.a
+*.so
+*.dylib
+
+# Documentation (can exclude)
+*.md
+README.md
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+.cargo/
+

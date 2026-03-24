@@ -3,6 +3,7 @@
 pub mod errors;
 pub mod handlers;
 pub mod state;
+pub mod auth;
 
 use axum::{
     routing::get,

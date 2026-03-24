@@ -35,6 +35,13 @@ parking_lot = "0.12"
 neo4rs = "0.9.0-rc.9"
 rand = "0.8"
 
+# Phase 5: Authentication & Security
+jsonwebtoken = "9.2"
+chrono = "0.4"
+redis = "0.24"
+governor = "0.7"
+unicode-segmentation = "1.10"
+
 # Common utilities
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }

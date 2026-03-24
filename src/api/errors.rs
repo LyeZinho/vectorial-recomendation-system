@@ -18,6 +18,7 @@ pub struct ErrorResponse {
     pub error: ErrorDetail,
 }
 
+#[derive(Debug)]
 pub enum ApiError {
     NotFound(String),
     BadRequest(String),

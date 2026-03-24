@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 import { WatchlistModule } from './watchlist/watchlist.module';
 import { SearchModule } from './search/search.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SearchModule } from './search/search.module';
     RecommendationsModule,
     WatchlistModule,
     SearchModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

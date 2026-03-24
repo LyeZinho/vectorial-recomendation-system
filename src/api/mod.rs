@@ -30,7 +30,7 @@ pub fn build_router(state: SharedState) -> Router {
         .route("/", get(root_handler))
         .route("/api/recommendations/:id", get(handlers::recommendations_handler))
         .route("/api/search", get(handlers::search_handler))
-        .route("/api/explain/:rec_id", get(handlers::explain_handler))
+        .route("/api/explain/:anime_id/:rec_id", get(handlers::explain_handler))
         .with_state(state)
 }
 

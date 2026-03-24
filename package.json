@@ -1,0 +1,13 @@
+{
+  "name": "vectorial-recommendation-system",
+  "private": true,
+  "workspaces": [
+    "services/nestjs-bridge",
+    "services/sveltekit-frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces"
+  }
+}

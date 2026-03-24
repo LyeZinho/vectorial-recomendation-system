@@ -4,6 +4,7 @@ pub mod errors;
 pub mod handlers;
 pub mod state;
 pub mod auth;
+pub mod cache;
 
 use axum::{
     routing::{get, post},

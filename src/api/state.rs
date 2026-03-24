@@ -1,23 +1,27 @@
 //! Shared application state (thread-safe)
 
 use crate::ml::HNSWIndex;
+use crate::api::auth::JwtManager;
+use crate::api::cache::CacheManager;
 use parking_lot::RwLock;
 use std::sync::Arc;
 
 pub type SharedState = Arc<AppState>;
 
 pub struct AppState {
-    /// Vector index (HNSW) for k-NN queries
     pub index: RwLock<HNSWIndex>,
-    /// Neo4j graph connection for complex queries
     pub graph: neo4rs::Graph,
+    pub jwt_manager: JwtManager,
+    pub cache: Option<CacheManager>,
 }
 
 impl AppState {
-    pub fn new(graph: neo4rs::Graph) -> Self {
+    pub fn new(graph: neo4rs::Graph, jwt_manager: JwtManager, cache: Option<CacheManager>) -> Self {
         Self {
             index: RwLock::new(HNSWIndex::new(256, 32)),
             graph,
+            jwt_manager,
+            cache,
         }
     }
 

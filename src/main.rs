@@ -224,6 +224,8 @@ fn stats(db: &str) -> anyhow::Result<()> {
 async fn serve(host: &str, port: &str, neo4j_uri: &str) -> anyhow::Result<()> {
     use anime_harvester::api;
     use anime_harvester::api::state::AppState;
+    use anime_harvester::api::auth::JwtManager;
+    use anime_harvester::api::cache::CacheManager;
     use tokio::net::TcpListener;
     
     println!("🚀 Starting Anime2Vec API server");
@@ -231,7 +233,15 @@ async fn serve(host: &str, port: &str, neo4j_uri: &str) -> anyhow::Result<()> {
     println!("🗄️  Neo4j: {}", neo4j_uri);
     
     let graph = neo4rs::Graph::new(neo4j_uri, "neo4j", "password")?;
-    let state = AppState::new(graph).as_shared();
+    
+    let jwt_secret = std::env::var("JWT_SECRET")
+        .unwrap_or_else(|_| "dev-secret-key-change-in-production".repeat(2));
+    let jwt_manager = JwtManager::new(jwt_secret);
+    
+    let redis_url = std::env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379/".to_string());
+    let cache = CacheManager::new(&redis_url).ok();
+    
+    let state = AppState::new(graph, jwt_manager, cache).as_shared();
     
     let router = api::build_router(state);
     

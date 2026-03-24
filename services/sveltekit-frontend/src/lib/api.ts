@@ -41,3 +41,32 @@ export async function register(email: string, username: string, password: string
 export async function getMe() {
   return apiCall('/users/me');
 }
+
+export async function getRecommendations(userId: string) {
+  return apiCall(`/recommendations/${userId}`);
+}
+
+export async function addToWatchlist(animeId: number, status: string = 'watching') {
+  return apiCall('/watchlist', {
+    method: 'POST',
+    body: JSON.stringify({ anime_id: animeId, status }),
+  });
+}
+
+export async function removeFromWatchlist(id: string) {
+  return apiCall(`/watchlist/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getWatchlist(status?: string) {
+  const query = status ? `?status=${status}` : '';
+  return apiCall(`/watchlist${query}`);
+}
+
+export async function updateWatchlistStatus(id: string, status: string) {
+  return apiCall(`/watchlist/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ status }),
+  });
+}

@@ -8,6 +8,7 @@ pub mod cache;
 
 use axum::{
     routing::{get, post},
+    middleware,
     http::StatusCode,
     response::IntoResponse,
     Json,
@@ -35,6 +36,14 @@ pub fn build_router(state: SharedState) -> Router {
         .route("/api/recommendations/:id", get(handlers::recommendations_handler))
         .route("/api/search", get(handlers::search_handler))
         .route("/api/explain/:anime_id/:rec_id", get(handlers::explain_handler))
+        .route(
+            "/api/admin/cache/invalidate",
+            post(handlers::invalidate_cache_handler)
+                .layer(middleware::from_fn_with_state(
+                    state.clone(),
+                    crate::api::auth::admin_middleware,
+                )),
+        )
         .with_state(state)
 }
 

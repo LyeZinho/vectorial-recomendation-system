@@ -7,9 +7,9 @@ use axum::{
 };
 use crate::api::state::SharedState;
 use crate::api::errors::ApiError;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct RecommendationResponse {
     pub anime_id: u64,
     pub anime_name: Option<String>,
@@ -17,7 +17,7 @@ pub struct RecommendationResponse {
     pub total: usize,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct RecommendationItem {
     pub anime_id: u64,
     pub name: String,
@@ -32,6 +32,16 @@ pub async fn recommendations_handler(
     Path(anime_id): Path<u64>,
     State(state): State<SharedState>,
 ) -> Result<(StatusCode, Json<RecommendationResponse>), ApiError> {
+    let cache_key = format!("recommendations:anime:{}", anime_id);
+
+    if let Some(cache) = &state.cache {
+        if let Ok(Some(cached_response)) = cache.get(&cache_key) {
+            if let Ok(parsed) = serde_json::from_str::<RecommendationResponse>(&cached_response) {
+                return Ok((StatusCode::OK, Json(parsed)));
+            }
+        }
+    }
+
     let source_query = "MATCH (a:Anime {id: $id}) RETURN a.name as name LIMIT 1";
     let mut result = state
         .graph
@@ -99,15 +109,20 @@ pub async fn recommendations_handler(
         });
     }
 
-    Ok((
-        StatusCode::OK,
-        Json(RecommendationResponse {
-            anime_id,
-            anime_name,
-            total: recommendations.len(),
-            recommendations,
-        }),
-    ))
+    let response = RecommendationResponse {
+        anime_id,
+        anime_name,
+        total: recommendations.len(),
+        recommendations,
+    };
+
+    if let Some(cache) = &state.cache {
+        if let Ok(json) = serde_json::to_string(&response) {
+            let _ = cache.set_ex(&cache_key, &json, 3600);
+        }
+    }
+
+    Ok((StatusCode::OK, Json(response)))
 }
 
 #[cfg(test)]

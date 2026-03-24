@@ -10,5 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 COPY --from=builder /app/build ./build
+COPY --from=builder /app/.svelte-kit ./.svelte-kit
 EXPOSE 5173
-CMD ["node", "-r", "dotenv/config", "build"]
+ENV NODE_ENV=production
+CMD ["node", "build"]

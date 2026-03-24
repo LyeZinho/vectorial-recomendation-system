@@ -3,6 +3,7 @@
 use crate::ml::HNSWIndex;
 use crate::api::auth::JwtManager;
 use crate::api::cache::CacheManager;
+use crate::api::middleware::RateLimitManager;
 use parking_lot::RwLock;
 use std::sync::Arc;
 
@@ -13,15 +14,17 @@ pub struct AppState {
     pub graph: neo4rs::Graph,
     pub jwt_manager: JwtManager,
     pub cache: Option<CacheManager>,
+    pub rate_limiter: RateLimitManager,
 }
 
 impl AppState {
-    pub fn new(graph: neo4rs::Graph, jwt_manager: JwtManager, cache: Option<CacheManager>) -> Self {
+    pub fn new(graph: neo4rs::Graph, jwt_manager: JwtManager, cache: Option<CacheManager>, rate_limiter: RateLimitManager) -> Self {
         Self {
             index: RwLock::new(HNSWIndex::new(256, 32)),
             graph,
             jwt_manager,
             cache,
+            rate_limiter,
         }
     }
 

@@ -5,10 +5,11 @@ pub mod handlers;
 pub mod state;
 pub mod auth;
 pub mod cache;
+pub mod middleware;
 
 use axum::{
     routing::{get, post},
-    middleware,
+    middleware as axum_middleware,
     http::StatusCode,
     response::IntoResponse,
     Json,
@@ -39,7 +40,7 @@ pub fn build_router(state: SharedState) -> Router {
         .route(
             "/api/admin/cache/invalidate",
             post(handlers::invalidate_cache_handler)
-                .layer(middleware::from_fn_with_state(
+                .layer(axum_middleware::from_fn_with_state(
                     state.clone(),
                     crate::api::auth::admin_middleware,
                 )),

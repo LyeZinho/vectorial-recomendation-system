@@ -226,6 +226,7 @@ async fn serve(host: &str, port: &str, neo4j_uri: &str) -> anyhow::Result<()> {
     use anime_harvester::api::state::AppState;
     use anime_harvester::api::auth::JwtManager;
     use anime_harvester::api::cache::CacheManager;
+    use anime_harvester::api::middleware::{RateLimitManager, RateLimitConfig};
     use tokio::net::TcpListener;
     
     println!("🚀 Starting Anime2Vec API server");
@@ -241,7 +242,9 @@ async fn serve(host: &str, port: &str, neo4j_uri: &str) -> anyhow::Result<()> {
     let redis_url = std::env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379/".to_string());
     let cache = CacheManager::new(&redis_url).ok();
     
-    let state = AppState::new(graph, jwt_manager, cache).as_shared();
+    let rate_limiter = RateLimitManager::new(RateLimitConfig { requests_per_second: 100 });
+    
+    let state = AppState::new(graph, jwt_manager, cache, rate_limiter).as_shared();
     
     let router = api::build_router(state);
     
